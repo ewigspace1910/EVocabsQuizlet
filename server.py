@@ -23,7 +23,6 @@ class DB:
         with open(profile, 'r') as file:
             self.profile = yaml.load(file, Loader=yaml.Loader)
 
-            print(self.profile)
 
 
     def get_topics(self):
@@ -36,6 +35,13 @@ class DB:
         if not self.df is None:
             return len(self.df)
         else: return 0
+    def get_learned_word(self):
+        if len(self.base_weight) == 0: return 0
+        else: 
+            count = 0
+            for i in self.base_weight: 
+                count += 1 if i == 3 else 0
+            return count
 
     def set_topic(self, index):
         self.focus = index

@@ -117,8 +117,12 @@ class Drawer(object):
         self.questFrame.place(x=0, y = self.Wsize // self.demoninator + 5)
         self.progressbar = tk.Canvas(self.root, bg="#33cc33", width=self.Wsize // self.__numquests, height=60)
         self.progressbar.place(x=0, y = self.Wsize - 50)
-        self.question = Label(self.questFrame, text="QUESTION:  ",  height=3);self.question.place(x=10, y=20)
-        self.pronounce = Label(self.questFrame, text="PRONOUCE:  ", fg="blue");self.pronounce.place(x=10, y=80)
+        self.question = Label(self.questFrame, text="QUESTION:  ",  height=4);self.question.place(x=10, y=20)
+        self.pronounce = Label(self.questFrame, text="PRONOUCE:  ", fg="white", bg="white");self.pronounce.place(x=150, y=100)
+        self.pronbtn = tk.Button(master=self.questFrame, text="show pronounce", fg="#003300",bg="#ff9933",
+                                width=15, height=1, 
+                                command=self.open_pron,
+                                cursor="target", relief=RAISED, font=btnf); self.pronbtn.place(x=10, y=100)
         self.choices = []
         noise = ["", "", "",""]
                 
@@ -154,16 +158,16 @@ class Drawer(object):
 
         words = self.__quest["q"].split()
         questdetail = " "
-        thres = 66
+        thres = 80
         for i in words:
             if len(questdetail) > thres:
                 questdetail += f"{i}\n\t"
-                thres += 50
+                thres += 60
             else: questdetail += f"{i} "  
 
         #questdetail = self.__quest["q"] #if len(self.__quest["q"]) < 100 else self.__quest["q"][:100] + "\n\t" + self.__quest["q"][100:]
         self.question.config(text= "QUESTION:{}".format(questdetail))
-        self.pronounce.config(text= "PRONOUCE:{}".format(self.__quest["p"]))
+        self.pronounce.config(text= " {} ".format(self.__quest["p"]), fg="white")
 
         if self.__quest["t"] == "choice":
             for i, x in enumerate(noise):
@@ -195,7 +199,7 @@ class Drawer(object):
         self.__hasanswerd = False
         self.__count_quest += 1
         self.update_processbar()
-
+    
 
     def show_answer(self, check, btn): 
         if self.__hasanswerd: return
@@ -231,13 +235,15 @@ class Drawer(object):
         else:
             self.log(mess="Incorrect 👊! True_answes is: {}".format(self.__quest['a'].upper()), sleep=3)
         # self.show_quest()
-        
+    
+    def open_pron(self):
+        self.pronounce.config(fg="blue")
 
         
     def end_test(self):
         self.statistic(true_quests=self.__true_ans, total_quests=self.__numquests,
                     all_len=self.database.get_len_topic(),
-                    nwords=len(set(self.__distictwords)), topic=self.database.get_name_topic())
+                    nwords=self.database.get_learned_word(), topic=self.database.get_name_topic())
         self.database.save_profile()
         self.title.config(text="MAIN MENU")
         self.title.place(x=self.Wsize // self.demoninator * 2 - 25, y=self.header.winfo_height() + 8)
