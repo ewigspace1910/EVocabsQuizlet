@@ -51,9 +51,11 @@ class DB:
             self.base_weight = self.base_weight if self.profile[self.topics[self.focus]] == len(self.df) else self.base_weight + [0] * (len(self.df) - len(self.base_weight))
         else : self.base_weight =  [0] * (len(self.df))
         
-        
+        self.rand_weight = []
         for i, x in enumerate(self.base_weight):
-            self.rand_weight += [i] * max(0, 3-x)
+            self.rand_weight += [i] * max(0, 5-x)
+        print(self.rand_weight)
+        random.shuffle(self.rand_weight)
         if len(self.rand_weight) == 0: self.save_profile()
 
         # print(self.base_weight)

@@ -214,6 +214,7 @@ class Drawer(object):
             self.__true_ans += 1
         else: 
             self.log(mess="Incorrect 👊!  True_answes is: {}".format(self.__quest['a']))
+            self.database.base_weight[self.__quest['id']] = max(0, self.database.base_weight[self.__quest['id']] - 1)
             for i in range(len(self.choices)):
                 if self.choices[i].cget("text") == self.__quest['a']:
                     self.choices[i].config(bg="#33cc33")
@@ -233,6 +234,7 @@ class Drawer(object):
             self.log(mess="Correct 👍", sleep=3)
             self.__true_ans += 1
         else:
+            self.database.base_weight[self.__quest['id']] = max(0, self.database.base_weight[self.__quest['id']] - 1)
             self.log(mess="Incorrect 👊! True_answes is: {}".format(self.__quest['a'].upper()), sleep=3)
         # self.show_quest()
     
@@ -283,7 +285,7 @@ class Drawer(object):
             self.resetparam()
             self.database.set_topic(id)
             self.__topic = id
-            self.__numquests = random.randint(5, min(25, self.database.get_len_topic())) if self.database.get_len_topic() > 5 else 5
+            self.__numquests = random.randint(15, min(25, self.database.get_len_topic())) if self.database.get_len_topic() > 5 else 5
             title = "TOPIC : " + self.database.get_name_topic().upper()
             self.title.config(text=title)
             self.title.place(x=self.Wsize // self.demoninator * 2 - len(title)*5, y=self.header.winfo_height() + 8)
